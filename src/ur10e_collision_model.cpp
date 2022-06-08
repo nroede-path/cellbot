@@ -187,16 +187,16 @@ int main(int argc, char** argv)
 
     create_collision_object(move_group.getPlanningFrame(),"ground",BOX,{2.8,2.8,0.1},{1.0,0.0,0.0,-z_height});
 
-    create_collision_object(move_group.getPlanningFrame(),"corner_box",BOX,{0.5,0.3,0.4},{1.0,-0.85,0.95,-z_height+0.2});
+    create_collision_object(move_group.getPlanningFrame(),"floor_clutter",BOX,{1.05,2.25,0.6},{1.0,-0.625,-0.025,-z_height+0.3});
 
-    create_collision_object(move_group.getPlanningFrame(),"scanner_table",BOX,{1.65,0.5,1.1},{1.0,-0.27,-1.3,-z_height+0.55});
+    create_collision_object(move_group.getPlanningFrame(),"scanner_table",BOX,{0.5,1.65,1.1},{1.0,1.2,-0.325,-z_height+0.55});
 
-    create_collision_object(move_group.getPlanningFrame(),"back_wall",BOX,{0.1,2.5,2.5},{1.0,-1.2,0,-z_height+1.25});
+    create_collision_object(move_group.getPlanningFrame(),"back_wall",BOX,{2.5,0.1,2.5},{1.0,0.0,-1.2,-z_height+1.25});
 
 
-    create_collision_object(move_group.getPlanningFrame(),"side_wall",BOX,{2.5,0.1,2.5},{1.0,0.0,1.2,-z_height+1.25});
+    create_collision_object(move_group.getPlanningFrame(),"side_wall",BOX,{0.1,2.5,2.5},{1.0,-1.2,0.0,-z_height+1.25});
 
-    create_collision_object(move_group.getPlanningFrame(),"computer_table",BOX,{0.5,1.2,1.2},{1.0,1.4,0.45,-z_height+0.6});
+    create_collision_object(move_group.getPlanningFrame(),"computer_table",BOX,{1.2,0.5,1.2},{1.0,-0.55,1.35,-z_height+0.6});
 
 
     // add the collision objects into the world
