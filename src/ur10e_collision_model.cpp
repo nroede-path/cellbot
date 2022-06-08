@@ -48,8 +48,8 @@
 #include <moveit_visual_tools/moveit_visual_tools.h>
 #include <iostream>
 
-        std::vector<moveit_msgs::CollisionObject> collision_objects;
-double z_hight= 0.75; //hight of the robot
+std::vector<moveit_msgs::CollisionObject> collision_objects;
+double z_height= 0.75; //height of the robot
 
 //primitive type guide 
 int BOX = 1;
@@ -105,7 +105,7 @@ int main(int argc, char** argv)
     //
     // MoveIt operates on sets of joints called "planning groups" and stores them in an object called
     // the `JointModelGroup`. Throughout MoveIt the terms "planning group" and "joint model group"
-    // are used interchangably.
+    // are used interchangeably.
     static const std::string PLANNING_GROUP = "manipulator";
 
     // The :move_group_interface:`MoveGroupInterface` class can be easily
@@ -183,20 +183,20 @@ int main(int argc, char** argv)
     //collision modeling
     // -------------------------------------------------------------------------------------------------------------------------------
 
-    create_collision_object(move_group.getPlanningFrame(),"stool",CYLINDER,{z_hight,0.08},{1.0,0.0,0.0,-z_hight/2});
+    create_collision_object(move_group.getPlanningFrame(),"stool",CYLINDER,{z_height,0.08},{1.0,0.0,0.0,-z_height/2});
 
-    create_collision_object(move_group.getPlanningFrame(),"ground",BOX,{2.8,2.8,0.1},{1.0,0.0,0.0,-z_hight});
+    create_collision_object(move_group.getPlanningFrame(),"ground",BOX,{2.8,2.8,0.1},{1.0,0.0,0.0,-z_height});
 
-    create_collision_object(move_group.getPlanningFrame(),"corner_box",BOX,{0.5,0.3,0.4},{1.0,-0.85,0.95,-z_hight+0.2});
+    create_collision_object(move_group.getPlanningFrame(),"corner_box",BOX,{0.5,0.3,0.4},{1.0,-0.85,0.95,-z_height+0.2});
 
-    create_collision_object(move_group.getPlanningFrame(),"scanner_table",BOX,{1.65,0.5,1.1},{1.0,-0.27,-1.3,-z_hight+0.55});
+    create_collision_object(move_group.getPlanningFrame(),"scanner_table",BOX,{1.65,0.5,1.1},{1.0,-0.27,-1.3,-z_height+0.55});
 
-    create_collision_object(move_group.getPlanningFrame(),"back_wall",BOX,{0.1,2.5,2.5},{1.0,-1.2,0,-z_hight+1.25});
+    create_collision_object(move_group.getPlanningFrame(),"back_wall",BOX,{0.1,2.5,2.5},{1.0,-1.2,0,-z_height+1.25});
 
 
-    create_collision_object(move_group.getPlanningFrame(),"side_wall",BOX,{2.5,0.1,2.5},{1.0,0.0,1.2,-z_hight+1.25});
+    create_collision_object(move_group.getPlanningFrame(),"side_wall",BOX,{2.5,0.1,2.5},{1.0,0.0,1.2,-z_height+1.25});
 
-    create_collision_object(move_group.getPlanningFrame(),"computer_table",BOX,{0.5,1.2,1.2},{1.0,1.4,0.45,-z_hight+0.6});
+    create_collision_object(move_group.getPlanningFrame(),"computer_table",BOX,{0.5,1.2,1.2},{1.0,1.4,0.45,-z_height+0.6});
 
 
     // add the collision objects into the world
@@ -242,7 +242,7 @@ int main(int argc, char** argv)
     // Command series of motion
     // ^^^^^^^^^^^^^^^^^^^^^^^^^
     int next;
-    std::cout << "bout to start motion, press any button to cont";
+    std::cout << "About to start motion, press any button to cont";
     std::cin >> next;
 
     move_group.setStartState(*move_group.getCurrentState());
@@ -299,19 +299,3 @@ int main(int argc, char** argv)
     ros::shutdown();
     return 0;
 }
-
-© 2022 GitHub, Inc.
-
-Terms
-        Privacy
-Security
-        Status
-Docs
-        Contact GitHub
-        Pricing
-API
-        Training
-Blog
-        About
-
-Loading complete
