@@ -1,4 +1,3 @@
-<!-- test -->
 <launch>
   <arg name="debug" default="false" />
   <arg name="limited" default="true" />
