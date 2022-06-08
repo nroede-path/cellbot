@@ -1,0 +1,8 @@
+prefix=/home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/devel
+
+Name: cellbot
+Description: Description of cellbot
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

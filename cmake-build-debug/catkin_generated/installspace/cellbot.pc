@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: cellbot
+Description: Description of cellbot
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

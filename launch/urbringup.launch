@@ -1,0 +1,33 @@
+<!-- testing here -->
+<launch>
+  <arg name="debug" default="false" />
+  <arg name="limited" default="true" />
+  <arg name="robot_ip" default="192.168.1.248" />
+  <arg name="kinematics_config" default="/home/nroede/rosproj/ur_ws/my_robot_calibration.yaml" />
+  <!-- <arg name="reverse_port" default=REVERSE_PORT /> -->
+  <arg name="rviz_config" default="$(find ur10e_moveit_config)/launch/moveit.rviz" />
+  <arg name="db" default="true" />
+
+  <!-- Launch robot driver -->
+  <include file="$(find ur_robot_driver)/launch/ur10e_bringup.launch">
+    <!-- <arg name="limited" default="$(arg limited)" /> -->
+    <arg name="robot_ip" default="$(arg robot_ip)" />
+    <arg name="kinematics_config" default="$(arg kinematics_config)" />
+    <!-- <arg name="reverse_port" default="$(arg reverse_port)" /> -->
+  </include>
+
+  <arg name="node_start_delay" default="5.0" />
+  <node name="listener" pkg="roscpp_tutorials" type="listener" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' " />
+
+  <!-- Launch moveit -->
+  <include file="$(find ur10e_moveit_config)/launch/ur10e_moveit_planning_execution.launch">
+    <arg name="debug" default="$(arg debug)" />
+    <!-- <arg name="limited" default="$(arg limited)" /> -->
+  </include>
+
+  <!-- Launch rviz -->
+  <include file="$(find ur10e_moveit_config)/launch/moveit_rviz.launch">
+    <arg name="rviz_config" default="$(arg rviz_config)" />
+    <!-- <arg name="db" default="$(arg db)" /> -->
+  </include>
+</launch>
