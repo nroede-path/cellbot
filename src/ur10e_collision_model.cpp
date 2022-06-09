@@ -183,7 +183,7 @@ int main(int argc, char** argv)
     //collision modeling
     // -------------------------------------------------------------------------------------------------------------------------------
 
-    create_collision_object(move_group.getPlanningFrame(),"stool",CYLINDER,{z_height,0.08},{1.0,0.0,0.0,-z_height/2});
+    create_collision_object(move_group.getPlanningFrame(),"stool",CYLINDER,{z_height - .01,0.08},{1.0,0.0,0.0,-z_height/2});
 
     create_collision_object(move_group.getPlanningFrame(),"ground",BOX,{2.8,2.8,0.1},{1.0,0.0,0.0,-z_height});
 
@@ -253,7 +253,7 @@ int main(int argc, char** argv)
     // - RRTstarkConfigDefault, PRMstarkConfigDefault (optimal)
     // the list of planning algorithm available fmauch_universal_robot/ur10_moveit_config/config/ompl_planning.yaml
 
-    move_group.setPlannerId("PRMstarkConfigDefault");
+    move_group.setPlannerId("RRTConnectkConfigDefault");
 
 
     double y[5]={-0.5,-0.25,0.0,0.25,0.5};
