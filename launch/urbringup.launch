@@ -9,7 +9,6 @@
 
   <!-- Launch robot driver -->
   <include file="$(find ur_robot_driver)/launch/ur10e_bringup.launch">
-    <!-- <arg name="limited" default="$(arg limited)" /> -->
     <arg name="robot_ip" default="$(arg robot_ip)" />
     <arg name="kinematics_config" default="$(arg kinematics_config)" />
     <!-- <arg name="reverse_port" default="$(arg reverse_port)" /> -->
@@ -21,7 +20,6 @@
   <!-- Launch moveit -->
   <include file="$(find ur10e_moveit_config)/launch/ur10e_moveit_planning_execution.launch">
     <arg name="debug" default="$(arg debug)" />
-    <!-- <arg name="limited" default="$(arg limited)" /> -->
   </include>
 
   <!-- Launch collision model node -->
