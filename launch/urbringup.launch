@@ -24,6 +24,11 @@
     <!-- <arg name="limited" default="$(arg limited)" /> -->
   </include>
 
+  <!-- Launch collision model node -->
+  <node name="collision_model" pkg="cellbot" type="ur10e_collision_model" launch-prefix="xterm -e"/>
+
+  <node name="listener2" pkg="roscpp_tutorials" type="listener" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' " />
+
   <!-- Launch rviz -->
   <include file="$(find ur10e_moveit_config)/launch/moveit_rviz.launch">
     <arg name="rviz_config" default="$(arg rviz_config)" />
