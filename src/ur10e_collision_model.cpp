@@ -183,61 +183,61 @@ int main(int argc, char** argv)
     //collision modeling
     // -------------------------------------------------------------------------------------------------------------------------------
 
-    create_collision_object(move_group.getPlanningFrame(),"stool",CYLINDER,{z_height - .01,0.08},{1.0,0.0,0.0,-z_height/2});
+//    create_collision_object(move_group.getPlanningFrame(),"stool",CYLINDER,{z_height - .01,0.08},{1.0,0.0,0.0,-z_height/2});
 
-    create_collision_object(move_group.getPlanningFrame(),"ground",BOX,{2.8,2.8,0.1},{1.0,0.0,0.0,-z_height});
+//    create_collision_object(move_group.getPlanningFrame(),"ground",BOX,{2.8,2.8,0.1},{1.0,0.0,0.0,-z_height});
+    create_collision_object(move_group.getPlanningFrame(),"ground",BOX,{2.8,2.8,0.1},{1.0,0.0,0.0,-0.15});
+//    create_collision_object(move_group.getPlanningFrame(),"floor_clutter",BOX,{1.05,2.25,0.6},{1.0,-0.625,-0.025,-z_height+0.3});
 
-    create_collision_object(move_group.getPlanningFrame(),"floor_clutter",BOX,{1.05,2.25,0.6},{1.0,-0.625,-0.025,-z_height+0.3});
+//    create_collision_object(move_group.getPlanningFrame(),"scanner_table",BOX,{0.5,1.65,1.1},{1.0,1.2,-0.325,-z_height+0.55});
 
-    create_collision_object(move_group.getPlanningFrame(),"scanner_table",BOX,{0.5,1.65,1.1},{1.0,1.2,-0.325,-z_height+0.55});
-
-    create_collision_object(move_group.getPlanningFrame(),"back_wall",BOX,{2.5,0.1,2.5},{1.0,0.0,-1.2,-z_height+1.25});
+//    create_collision_object(move_group.getPlanningFrame(),"back_wall",BOX,{2.5,0.1,2.5},{1.0,0.0,-1.2,-z_height+1.25});
 
 
-    create_collision_object(move_group.getPlanningFrame(),"side_wall",BOX,{0.1,2.5,2.5},{1.0,-1.2,0.0,-z_height+1.25});
+//    create_collision_object(move_group.getPlanningFrame(),"side_wall",BOX,{0.1,2.5,2.5},{1.0,-1.2,0.0,-z_height+1.25});
 
-    create_collision_object(move_group.getPlanningFrame(),"computer_table",BOX,{1.2,0.5,1.2},{1.0,-0.55,1.35,-z_height+0.6});
+//    create_collision_object(move_group.getPlanningFrame(),"computer_table",BOX,{1.2,0.5,1.2},{1.0,-0.55,1.35,-z_height+0.6});
 
 
     // add the collision objects into the world
     ROS_INFO("Adding collision objects into the world");
     planning_scene_interface.applyCollisionObjects(collision_objects);
-
-
-
-    // constrains the sholder lift joint to stay approximatly in the upright position
-    moveit_msgs::JointConstraint shoulder_lift_constraint;
-    shoulder_lift_constraint.joint_name="shoulder_lift_joint";
-    shoulder_lift_constraint.position=-1.5708;
-    shoulder_lift_constraint.tolerance_below= 0.872665;
-    shoulder_lift_constraint.tolerance_above=0.872665;
-    shoulder_lift_constraint.weight=1.0;
-
-    moveit_msgs::Constraints joint_constraints;
-    joint_constraints.joint_constraints.push_back(shoulder_lift_constraint);
-
-
-    // constrains the sholder pan joint to avoid longer paths
-    moveit_msgs::JointConstraint shoulder_pan_constraint;
-    shoulder_pan_constraint.joint_name="shoulder_pan_joint";
-    shoulder_pan_constraint.position=0;
-    shoulder_pan_constraint.tolerance_below= 3;
-    shoulder_pan_constraint.tolerance_above= 3;
-    shoulder_pan_constraint.weight=1.0;
-
-    joint_constraints.joint_constraints.push_back(shoulder_pan_constraint);
-
-    // constrains the wrist_3_joint joint to avoid longer paths
-    moveit_msgs::JointConstraint wrist_3_constraint;
-    wrist_3_constraint.joint_name="wrist_3_joint";
-    wrist_3_constraint.position=0;
-    wrist_3_constraint.tolerance_below= 0.001;
-    wrist_3_constraint.tolerance_above= 0.001;
-    wrist_3_constraint.weight=1.0;
-
-    joint_constraints.joint_constraints.push_back(wrist_3_constraint);
-
-    move_group.setPathConstraints(joint_constraints);
+//
+//
+//
+//    // constrains the shoulder lift joint to stay approximately in the upright position
+//    moveit_msgs::JointConstraint shoulder_lift_constraint;
+//    shoulder_lift_constraint.joint_name="shoulder_lift_joint";
+//    shoulder_lift_constraint.position=-1.5708;
+//    shoulder_lift_constraint.tolerance_below= 0.872665;
+//    shoulder_lift_constraint.tolerance_above=0.872665;
+//    shoulder_lift_constraint.weight=1.0;
+//
+//    moveit_msgs::Constraints joint_constraints;
+//    joint_constraints.joint_constraints.push_back(shoulder_lift_constraint);
+//
+//
+//    // constrains the shoulder pan joint to avoid longer paths
+//    moveit_msgs::JointConstraint shoulder_pan_constraint;
+//    shoulder_pan_constraint.joint_name="shoulder_pan_joint";
+//    shoulder_pan_constraint.position=0;
+//    shoulder_pan_constraint.tolerance_below= 3;
+//    shoulder_pan_constraint.tolerance_above= 3;
+//    shoulder_pan_constraint.weight=1.0;
+//
+//    joint_constraints.joint_constraints.push_back(shoulder_pan_constraint);
+//
+//    // constrains the wrist_3_joint joint to avoid longer paths
+//    moveit_msgs::JointConstraint wrist_3_constraint;
+//    wrist_3_constraint.joint_name="wrist_3_joint";
+//    wrist_3_constraint.position=0;
+//    wrist_3_constraint.tolerance_below= 0.001;
+//    wrist_3_constraint.tolerance_above= 0.001;
+//    wrist_3_constraint.weight=1.0;
+//
+//    joint_constraints.joint_constraints.push_back(wrist_3_constraint);
+//
+//    move_group.setPathConstraints(joint_constraints);
 
     // Command series of motion
     // ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -253,48 +253,71 @@ int main(int argc, char** argv)
     // - RRTstarkConfigDefault, PRMstarkConfigDefault (optimal)
     // the list of planning algorithm available fmauch_universal_robot/ur10_moveit_config/config/ompl_planning.yaml
 
-    move_group.setPlannerId("RRTConnectkConfigDefault");
+//    move_group.setPlannerId("RRTstarkConfigDefault");
+//
+//
+//    //double y[5]={-0.5,-0.25,0.0,0.25,0.5};
+//
+//    geometry_msgs::Pose target_pose1;
+//    //bool success;
+//
+//
+//    while (ros::ok())
+//    {
+//        for (int i = 0; i < 5; i++)
+//        {
+//            target_pose1.orientation.x = -0.707107;
+//            target_pose1.orientation.y = 0.000108;
+//            target_pose1.orientation.z = 0.000061;
+//            target_pose1.orientation.w = 0.707106;
+//            target_pose1.position.x = 0.004517;
+//            //target_pose1.position.y = y[i];
+//            target_pose1.position.y = 0.290701;
+//            target_pose1.position.z = 1.31131;
+//            move_group.setPoseTarget(target_pose1, "tool0");
+//            move_group.setGoalTolerance(0.01);
+//
+//            // Now, we call the planner to compute the plan and visualize it.
+//            // Note that we are just planning, not asking move_group
+//            // to actually move the robot.
+//
+//            int plan_trial=0;
+//            while (ros::ok() && !move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+//            {
+//                ros::Duration(0.1).sleep();
+//                ROS_INFO("planning trial %i",plan_trial++);
+//            }
+//
+//
+//            ROS_INFO("Moving to pose goal %i",i);
+//
+//
+//            move_group.move();
+//
+//            ros::Duration(1.0).sleep();
+//        }
+//    }
 
+    geometry_msgs::Pose target_pose2;
+    target_pose2.orientation.w = 1.0;
+    target_pose2.position.x = 0.28;
+    target_pose2.position.y = -0.2;
+    target_pose2.position.z = 1.1;
+    move_group.setPoseTarget(target_pose2);
 
-    double y[5]={-0.5,-0.25,0.0,0.25,0.5};
+    // Now, we call the planner to compute the plan and visualize it.
+    // Note that we are just planning, not asking move_group
+    // to actually move the robot.
+    moveit::planning_interface::MoveGroupInterface::Plan my_plan2;
 
-    geometry_msgs::Pose target_pose1;
-    //bool success;
-
-
-    while (ros::ok())
+    int plan_trial2=0;
+    while (ros::ok() && !move_group.plan(my_plan2) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
     {
-        for (int i = 0; i < 5; i++)
-        {
-            target_pose1.orientation.w = 1.0;
-            target_pose1.position.x = 0.5;
-            target_pose1.position.y = y[i];
-            target_pose1.position.z = 0.5;
-            move_group.setPoseTarget(target_pose1);
-
-            // Now, we call the planner to compute the plan and visualize it.
-            // Note that we are just planning, not asking move_group
-            // to actually move the robot.
-
-            int plan_trial=0;
-            while (ros::ok() && !move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-            {
-                ros::Duration(0.1).sleep();
-                ROS_INFO("planning trial %i",plan_trial++);
-            }
-
-
-            ROS_INFO("Moving to pose goal %i",i);
-
-
-            move_group.move();
-
-            ros::Duration(1.0).sleep();
-        }
+        ros::Duration(0.1).sleep();
+        ROS_INFO("planning trial %i",plan_trial2++);
     }
 
-
-
+    move_group.move();
 
     ros::shutdown();
     return 0;

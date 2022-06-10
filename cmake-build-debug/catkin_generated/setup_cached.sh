@@ -11,4 +11,4 @@ export CMAKE_PREFIX_PATH="/home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-deb
 export LD_LIBRARY_PATH="/home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/devel/lib:$LD_LIBRARY_PATH"
 export PKG_CONFIG_PATH="/home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/devel/lib/pkgconfig:$PKG_CONFIG_PATH"
 export ROSLISP_PACKAGE_DIRECTORIES="/home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/devel/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
-export ROS_PACKAGE_PATH="/home/nroede/rosproj/ur_ws/src/cellbot:/home/nroede/rosproj/ur_ws/src/cellbot:$ROS_PACKAGE_PATH"
+export ROS_PACKAGE_PATH="/home/nroede/rosproj/ur_ws/src/cellbot:$ROS_PACKAGE_PATH"

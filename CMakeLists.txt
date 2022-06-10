@@ -7,7 +7,7 @@ project(cellbot)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS moveit_ros_planning moveit_ros_planning_interface)
+find_package(catkin REQUIRED COMPONENTS moveit_ros_planning moveit_ros_planning_interface moveit_visual_tools rviz_visual_tools)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -130,12 +130,16 @@ ${catkin_INCLUDE_DIRS}
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(${cellbot}_ur10e_collision_model src/ur10e_collision_model.cpp)
+add_executable(${cellbot}_direct_move src/direct_move.cpp)
+add_executable(${cellbot}_move_group_interface_tutorial src/move_group_interface_tutorial.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
 set_target_properties(${cellbot}_ur10e_collision_model PROPERTIES OUTPUT_NAME ur10e_collision_model PREFIX "")
+set_target_properties(${cellbot}_direct_move PROPERTIES OUTPUT_NAME direct_move PREFIX "")
+set_target_properties(${cellbot}_move_group_interface_tutorial PROPERTIES OUTPUT_NAME move_group_interface_tutorial PREFIX "")
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -143,6 +147,8 @@ set_target_properties(${cellbot}_ur10e_collision_model PROPERTIES OUTPUT_NAME ur
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${cellbot}_ur10e_collision_model ${catkin_LIBRARIES})
+target_link_libraries(${cellbot}_direct_move ${catkin_LIBRARIES})
+target_link_libraries(${cellbot}_move_group_interface_tutorial ${catkin_LIBRARIES})
 
 #############
 ## Install ##
