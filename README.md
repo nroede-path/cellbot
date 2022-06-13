@@ -28,7 +28,9 @@ Moves the robot to its home position (straight up facing the computer with wrist
 ## ur10e_cartesian_point_move
 Initializes, waits for a further input, then plans TCP movement to a defined Cartesian point and orientation and moves the robot along the planned path.
 The planner algorithm used is PRMstar, set using
+
 "move_group.setPlannerId("PRMstar");
+
 This algorithm, along with constraining the shoulder pan joint to +-3 resulted in fairly consistent/reasonable paths successfully found every trial.
 
 # Dependencies
