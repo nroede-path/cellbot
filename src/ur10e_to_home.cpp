@@ -48,48 +48,11 @@
 #include <moveit_visual_tools/moveit_visual_tools.h>
 #include <iostream>
 
-std::vector<moveit_msgs::CollisionObject> collision_objects;
-double z_height= 0.75; //height of the robot
-
-//primitive type guide
-int BOX = 1;
-int SPHERE = 2;
-int CYLINDER = 3;
-int CONE = 4;
-
 // pose codes
 int W=0;
 int X=1;
 int Y=2;
 int Z=3;
-
-
-
-void create_collision_object(std::string frame_id, std::string object_id, int type, std::vector<double> dimensions, std::vector<double> pose ){
-
-    //pose expressed in w,x,y,z
-
-    moveit_msgs::CollisionObject object;
-    object.header.frame_id=frame_id;
-    object.id=object_id;
-
-    shape_msgs::SolidPrimitive object_primitive;
-    object_primitive.type = type;
-    object_primitive.dimensions=dimensions;
-
-    geometry_msgs::Pose object_pose;
-    object_pose.orientation.w=pose[W];
-    object_pose.position.x=pose[X];
-    object_pose.position.y=pose[Y];
-    object_pose.position.z=pose[Z];
-
-    object.primitives.push_back(object_primitive);
-    object.primitive_poses.push_back(object_pose);
-    object.operation=object.ADD;
-
-    collision_objects.push_back(object);
-
-}
 
 int main(int argc, char** argv)
 {

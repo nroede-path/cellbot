@@ -48,48 +48,11 @@
 #include <moveit_visual_tools/moveit_visual_tools.h>
 #include <iostream>
 
-std::vector<moveit_msgs::CollisionObject> collision_objects;
-double z_height= 0.75; //height of the robot
-
-//primitive type guide 
-int BOX = 1;
-int SPHERE = 2;
-int CYLINDER = 3;
-int CONE = 4;
-
 // pose codes
 int W=0;
 int X=1;
 int Y=2;
 int Z=3;
-
-
-
-void create_collision_object(std::string frame_id, std::string object_id, int type, std::vector<double> dimensions, std::vector<double> pose ){
-
-    //pose expressed in w,x,y,z
-
-    moveit_msgs::CollisionObject object;
-    object.header.frame_id=frame_id;
-    object.id=object_id;
-
-    shape_msgs::SolidPrimitive object_primitive;
-    object_primitive.type = type;
-    object_primitive.dimensions=dimensions;
-
-    geometry_msgs::Pose object_pose;
-    object_pose.orientation.w=pose[W];
-    object_pose.position.x=pose[X];
-    object_pose.position.y=pose[Y];
-    object_pose.position.z=pose[Z];
-
-    object.primitives.push_back(object_primitive);
-    object.primitive_poses.push_back(object_pose);
-    object.operation=object.ADD;
-
-    collision_objects.push_back(object);
-
-}
 
 int main(int argc, char** argv)
 {
@@ -140,69 +103,46 @@ int main(int argc, char** argv)
     // ^^^^^^^^^^^^^^^^^^^^^^^^^
     moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
-    move_group.setStartState(*move_group.getCurrentState());
-
-
-    sensor_msgs::JointState js;
-
-    // js.header.frame_id.push_back("base_link");
-    // js.header.stamp.now();
-
-
-    js.name.push_back("shoulder_lift_joint");
-    js.name.push_back("shoulder_pan_joint");
-    js.name.push_back("elbow_joint");
-    js.name.push_back("wrist_1_joint");
-    js.name.push_back("wrist_2_joint");
-    js.name.push_back("wrist_3_joint");
-
-    js.position.push_back(-1.5708);
-    js.position.push_back(0.0);
-    js.position.push_back(0.0);
-    js.position.push_back(0.0);
-    js.position.push_back(0.0);
-    js.position.push_back(0.0);
-
-
-
-    move_group.setJointValueTarget(js);
-
-
-    int plan_trial=0;
-    while (ros::ok() && !move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-    {
-        ros::Duration(0.1).sleep();
-        ROS_INFO("planning trial %i",plan_trial++);
-    }
-
-
-    move_group.move();
-
-
-
-    //collision modeling
-    // -------------------------------------------------------------------------------------------------------------------------------
-
-    create_collision_object(move_group.getPlanningFrame(),"stool",CYLINDER,{z_height - .01,0.08},{1.0,0.0,0.0,-z_height/2});
-
-    create_collision_object(move_group.getPlanningFrame(),"ground",BOX,{2.8,2.8,0.1},{1.0,0.0,0.0,-z_height});
-//    create_collision_object(move_group.getPlanningFrame(),"ground",BOX,{2.8,2.8,0.1},{1.0,0.0,0.0,-0.15});
-    create_collision_object(move_group.getPlanningFrame(),"floor_clutter",BOX,{1.05,2.25,0.6},{1.0,-0.625,-0.025,-z_height+0.3});
-
-    create_collision_object(move_group.getPlanningFrame(),"scanner_table",BOX,{0.5,1.65,1.1},{1.0,1.2,-0.325,-z_height+0.55});
-
-    create_collision_object(move_group.getPlanningFrame(),"back_wall",BOX,{2.5,0.1,2.5},{1.0,0.0,-1.2,-z_height+1.25});
-
-
-    create_collision_object(move_group.getPlanningFrame(),"side_wall",BOX,{0.1,2.5,2.5},{1.0,-1.2,0.0,-z_height+1.25});
-
-    create_collision_object(move_group.getPlanningFrame(),"computer_table",BOX,{1.2,0.5,1.2},{1.0,-0.55,1.35,-z_height+0.6});
-
-
-    // add the collision objects into the world
-    ROS_INFO("Adding collision objects into the world");
-    planning_scene_interface.applyCollisionObjects(collision_objects);
+//    move_group.setStartState(*move_group.getCurrentState());
 //
+//
+//    sensor_msgs::JointState js;
+//
+//    // js.header.frame_id.push_back("base_link");
+//    // js.header.stamp.now();
+//
+//
+//    js.name.push_back("shoulder_lift_joint");
+//    js.name.push_back("shoulder_pan_joint");
+//    js.name.push_back("elbow_joint");
+//    js.name.push_back("wrist_1_joint");
+//    js.name.push_back("wrist_2_joint");
+//    js.name.push_back("wrist_3_joint");
+//
+//    js.position.push_back(-1.5708);
+//    js.position.push_back(0.0);
+//    js.position.push_back(0.0);
+//    js.position.push_back(0.0);
+//    js.position.push_back(0.0);
+//    js.position.push_back(0.0);
+//
+//
+//
+//    move_group.setJointValueTarget(js);
+//
+//
+//    int plan_trial=0;
+//    while (ros::ok() && !move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+//    {
+//        ros::Duration(0.1).sleep();
+//        ROS_INFO("planning trial %i",plan_trial++);
+//    }
+//
+//
+//    move_group.move();
+
+    // Establish joint constraints
+
     moveit_msgs::Constraints joint_constraints;
 //
 //    // constrains the shoulder lift joint to stay approximately in the upright position
@@ -236,25 +176,25 @@ int main(int argc, char** argv)
 //    wrist_3_constraint.weight=1.0;
 //
 //    joint_constraints.joint_constraints.push_back(wrist_3_constraint);
-//
+
     move_group.setPathConstraints(joint_constraints);
 
-//    // Command series of motion
-//    // ^^^^^^^^^^^^^^^^^^^^^^^^^
-//    int next;
-//    std::cout << "About to start motion, press any button to cont";
-//    std::cin >> next;
-//
-//    move_group.setStartState(*move_group.getCurrentState());
-//    move_group.setPlanningTime(1); //speed up planning from default of 5s to 1s
-//
-//    // Planning algorithms:
-//    // - RRTConnect (fast)
-//    // - RRTstar, PRMstar (optimal)
-//    // the list of planning algorithm available fmauch_universal_robot/ur10e_moveit_config/config/ompl_planning.yaml
-//
-//    move_group.setPlannerId("PRMstar");
-//    move_group.setNumPlanningAttempts(50);
+    // Command series of motion
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^
+    int next;
+    std::cout << "About to start motion, press any button to cont";
+    std::cin >> next;
+
+    move_group.setStartState(*move_group.getCurrentState());
+    move_group.setPlanningTime(1); //speed up planning from default of 5s to 1s
+
+    // Planning algorithms:
+    // - RRTConnect (fast)
+    // - RRTstar, PRMstar (optimal)
+    // the list of planning algorithm available fmauch_universal_robot/ur10e_moveit_config/config/ompl_planning.yaml
+
+    move_group.setPlannerId("PRMstar");
+    move_group.setNumPlanningAttempts(50);
 //
 //
 //    //double y[5]={-0.5,-0.25,0.0,0.25,0.5};
@@ -298,27 +238,27 @@ int main(int argc, char** argv)
 //            ros::Duration(1.0).sleep();
 //        }
 //    }
-//
-//    geometry_msgs::Pose target_pose2;
-//    target_pose2.orientation.w = 1.0;
-//    target_pose2.position.x = 0.28;
-//    target_pose2.position.y = -0.2;
-//    target_pose2.position.z = 1.1;
-//    move_group.setPoseTarget(target_pose2);
-//
-//    // Now, we call the planner to compute the plan and visualize it.
-//    // Note that we are just planning, not asking move_group
-//    // to actually move the robot.
-//    moveit::planning_interface::MoveGroupInterface::Plan my_plan2;
-//
-//    int plan_trial2=0;
-//    while (ros::ok() && !move_group.plan(my_plan2) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-//    {
-//        ros::Duration(0.1).sleep();
-//        ROS_INFO("planning trial %i",plan_trial2++);
-//    }
-//
-//    move_group.move();
+
+    geometry_msgs::Pose target_pose2;
+    target_pose2.orientation.w = 1.0;
+    target_pose2.position.x = 0.28;
+    target_pose2.position.y = -0.2;
+    target_pose2.position.z = 1.1;
+    move_group.setPoseTarget(target_pose2);
+
+    // Now, we call the planner to compute the plan and visualize it.
+    // Note that we are just planning, not asking move_group
+    // to actually move the robot.
+    moveit::planning_interface::MoveGroupInterface::Plan my_plan2;
+
+    int plan_trial2=0;
+    while (ros::ok() && !move_group.plan(my_plan2) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+    {
+        ros::Duration(0.1).sleep();
+        ROS_INFO("planning trial %i",plan_trial2++);
+    }
+
+    move_group.move();
 
     ros::shutdown();
     return 0;
