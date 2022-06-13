@@ -15,7 +15,7 @@ Can't accept new action goals. Controller is not running.
 
 This will persist (even if the ROS nodes are restarted) until the UR pendant program itself is stopped and restarted.
 
-# Packages
+# Programs
 
 ## ur10e_to_home
 
