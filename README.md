@@ -31,7 +31,7 @@ The planner algorithm used is PRMstar, set using
 
 "move_group.setPlannerId("PRMstar");
 
-This algorithm, along with constraining the shoulder pan joint to +-3 resulted in fairly consistent/reasonable paths successfully found every trial.
+This algorithm, along with constraining the shoulder pan joint to +-3 resulted in fairly consistent/reasonable paths that could be successfully found every trial.
 
 # Dependencies
 
