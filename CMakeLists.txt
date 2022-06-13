@@ -132,6 +132,7 @@ ${catkin_INCLUDE_DIRS}
 add_executable(${cellbot}_ur10e_collision_model src/ur10e_collision_model.cpp)
 add_executable(${cellbot}_direct_move src/direct_move.cpp)
 add_executable(${cellbot}_move_group_interface_tutorial src/move_group_interface_tutorial.cpp)
+add_executable(${cellbot}_ur10e_to_home src/ur10e_to_home.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -140,6 +141,7 @@ add_executable(${cellbot}_move_group_interface_tutorial src/move_group_interface
 set_target_properties(${cellbot}_ur10e_collision_model PROPERTIES OUTPUT_NAME ur10e_collision_model PREFIX "")
 set_target_properties(${cellbot}_direct_move PROPERTIES OUTPUT_NAME direct_move PREFIX "")
 set_target_properties(${cellbot}_move_group_interface_tutorial PROPERTIES OUTPUT_NAME move_group_interface_tutorial PREFIX "")
+set_target_properties(${cellbot}_ur10e_to_home PROPERTIES OUTPUT_NAME ur10e_to_home PREFIX "")
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -149,6 +151,7 @@ set_target_properties(${cellbot}_move_group_interface_tutorial PROPERTIES OUTPUT
 target_link_libraries(${cellbot}_ur10e_collision_model ${catkin_LIBRARIES})
 target_link_libraries(${cellbot}_direct_move ${catkin_LIBRARIES})
 target_link_libraries(${cellbot}_move_group_interface_tutorial ${catkin_LIBRARIES})
+target_link_libraries(${cellbot}_ur10e_to_home ${catkin_LIBRARIES})
 
 #############
 ## Install ##
