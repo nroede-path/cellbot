@@ -40,6 +40,7 @@ in order to have the correct packages setup for the robot to run.
 Packages needed:
 - Universal_Robots_ROS_Driver
 - fmauch_universal_robot
+- pylon-ros-camera (https://github.com/basler/pylon-ros-camera)
 
 # Collision Model
 
