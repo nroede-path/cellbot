@@ -189,7 +189,7 @@ foreach(t ${cellbot_EXPORTED_TARGETS})
   endif()
 endforeach()
 
-set(depends "")
+set(depends "moveit_ros_planning;moveit_ros_planning_interface;moveit_visual_tools;rviz_visual_tools;cv_bridge;sensor_msgs;roscpp;std_msgs;image_transport")
 foreach(depend ${depends})
   string(REPLACE " " ";" depend_list ${depend})
   # the package name of the dependency must be kept in a unique variable so that it is not overwritten in recursive calls

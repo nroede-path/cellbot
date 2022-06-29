@@ -7,7 +7,8 @@ project(cellbot)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS moveit_ros_planning moveit_ros_planning_interface moveit_visual_tools rviz_visual_tools)
+find_package(catkin REQUIRED COMPONENTS moveit_ros_planning moveit_ros_planning_interface moveit_visual_tools rviz_visual_tools cv_bridge sensor_msgs roscpp std_msgs image_transport)
+find_package(OpenCV 3 REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -101,7 +102,7 @@ find_package(catkin REQUIRED COMPONENTS moveit_ros_planning moveit_ros_planning_
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES cellbot
-#  CATKIN_DEPENDS other_catkin_pkg
+  CATKIN_DEPENDS moveit_ros_planning moveit_ros_planning_interface moveit_visual_tools rviz_visual_tools cv_bridge sensor_msgs roscpp std_msgs image_transport
 #  DEPENDS system_lib
 )
 
@@ -114,6 +115,7 @@ catkin_package(
 include_directories(
 # include
 ${catkin_INCLUDE_DIRS}
+${OpenCV_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -134,6 +136,8 @@ add_executable(${cellbot}_direct_move src/direct_move.cpp)
 add_executable(${cellbot}_move_group_interface_tutorial src/move_group_interface_tutorial.cpp)
 add_executable(${cellbot}_ur10e_to_home src/ur10e_to_home.cpp)
 add_executable(${cellbot}_ur10e_cartesian_point_move src/ur10e_cartesian_point_move.cpp)
+add_executable(${cellbot}_find_calib_center src/find_calib_center.cpp)
+add_executable(${cellbot}_pylon_circle_example src/pylon_circle_example.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -144,6 +148,8 @@ set_target_properties(${cellbot}_direct_move PROPERTIES OUTPUT_NAME direct_move 
 set_target_properties(${cellbot}_move_group_interface_tutorial PROPERTIES OUTPUT_NAME move_group_interface_tutorial PREFIX "")
 set_target_properties(${cellbot}_ur10e_to_home PROPERTIES OUTPUT_NAME ur10e_to_home PREFIX "")
 set_target_properties(${cellbot}_ur10e_cartesian_point_move PROPERTIES OUTPUT_NAME ur10e_cartesian_point_move PREFIX "")
+set_target_properties(${cellbot}_find_calib_center PROPERTIES OUTPUT_NAME find_calib_center PREFIX "")
+set_target_properties(${cellbot}_pylon_circle_example PROPERTIES OUTPUT_NAME pylon_circle_example PREFIX "")
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -155,6 +161,8 @@ target_link_libraries(${cellbot}_direct_move ${catkin_LIBRARIES})
 target_link_libraries(${cellbot}_move_group_interface_tutorial ${catkin_LIBRARIES})
 target_link_libraries(${cellbot}_ur10e_to_home ${catkin_LIBRARIES})
 target_link_libraries(${cellbot}_ur10e_cartesian_point_move ${catkin_LIBRARIES})
+target_link_libraries(${cellbot}_find_calib_center ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(${cellbot}_pylon_circle_example ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 #############
 ## Install ##

@@ -5,4 +5,4 @@ Description: Description of cellbot
 Version: 0.0.0
 Cflags: 
 Libs: -L${prefix}/lib 
-Requires: 
+Requires: moveit_ros_planning moveit_ros_planning_interface moveit_visual_tools rviz_visual_tools cv_bridge sensor_msgs roscpp std_msgs image_transport

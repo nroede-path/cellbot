@@ -102,6 +102,8 @@
 /home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/CMakeFiles/_move_group_interface_tutorial.dir
 /home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/CMakeFiles/_ur10e_to_home.dir
 /home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/CMakeFiles/_ur10e_cartesian_point_move.dir
+/home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/CMakeFiles/_find_calib_center.dir
+/home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/CMakeFiles/_pylon_circle_example.dir
 /home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/CMakeFiles/test.dir
 /home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/CMakeFiles/edit_cache.dir
 /home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/CMakeFiles/rebuild_cache.dir
