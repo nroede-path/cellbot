@@ -2,14 +2,17 @@
 #include <ros/ros.h>
 
 // Include opencv2
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/calib3d.hpp>
 
 // Include CvBridge, Image Transport, Image msg
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
 
+#include <vector>
 #include <iostream>
 
 using namespace cv;
@@ -53,13 +56,14 @@ public:
             return;
         }
 
-        // Draw an example circle on the video stream
-        if (cv_ptr->image.rows > 60 && cv_ptr->image.cols > 60)
-            cv::circle(cv_ptr->image, cv::Point(50, 50), 10, CV_RGB(255,0,0));
+        Size patternsize(6, 15); //number of centers
+        std::vector<Point2f> centers; //this will be filled by the detected centers
+        bool patternfound = findCirclesGrid(cv_ptr->image, patternsize, centers, CALIB_CB_ASYMMETRIC_GRID | CALIB_CB_CLUSTERING);
+        drawChessboardCorners(cv_ptr->image, patternsize, Mat(centers), patternfound);
 
         // Update GUI Window
         cv::imshow(OPENCV_WINDOW, cv_ptr->image);
-        cv::waitKey(3);
+        cv::waitKey(2); // Delay between frames
 
         // Output modified video stream
         image_pub_.publish(cv_ptr->toImageMsg());
