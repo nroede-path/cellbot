@@ -1,3 +1,5 @@
+// Finds the asymmetrical circular calibration board centers and draws lines on the board via video feed
+
 // Include the ROS library
 #include <ros/ros.h>
 
@@ -60,6 +62,23 @@ public:
         std::vector<Point2f> centers; //this will be filled by the detected centers
         bool patternfound = findCirclesGrid(cv_ptr->image, patternsize, centers, CALIB_CB_ASYMMETRIC_GRID | CALIB_CB_CLUSTERING);
         drawChessboardCorners(cv_ptr->image, patternsize, Mat(centers), patternfound);
+
+        // Generate calib board center coord vector
+        std::vector<Point3f> board_points_;
+
+        int n_rows = patternsize.height;
+        int n_cols = patternsize.width;
+        double spacing = 22/sqrt(2); // using diag spacing in mm
+        board_points_.resize(n_cols*n_rows);
+        for (int n = 0; n < board_points_.size(); ++n) {
+            int row_n = n / n_cols;
+            int col_n = n % n_cols;
+
+            board_points_[n].x = (float) ((2 * col_n + row_n % 2) *spacing);
+            board_points_[n].y = (float) (row_n * spacing);
+            board_points_[n].z = 0.0;
+        } // (int n = 0; n < n_rows*n_cols; ++n)
+        ROS_INFO_STREAM(board_points_);
 
         // Update GUI Window
         cv::imshow(OPENCV_WINDOW, cv_ptr->image);
