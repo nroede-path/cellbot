@@ -37,10 +37,12 @@ CMake Deprecation Warning at /usr/src/googletest/googletest/CMakeLists.txt:48 (c
 
 
 -- Found PythonInterp: /usr/bin/python2 (found version "2.7.17") 
+-- Found Threads: TRUE  
 -- Using Python nosetests: /usr/bin/nosetests-2.7
 -- catkin 0.7.29
 -- BUILD_SHARED_LIBS is on
 -- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Found OpenCV: /usr (found suitable version "3.2.0", minimum required is "3") 
 -- Configuring done
 -- Generating done
 -- Build files have been written to: /home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug

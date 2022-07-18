@@ -138,6 +138,7 @@ add_executable(${cellbot}_ur10e_to_home src/ur10e_to_home.cpp)
 add_executable(${cellbot}_ur10e_cartesian_point_move src/ur10e_cartesian_point_move.cpp)
 add_executable(${cellbot}_find_calib_center src/find_calib_center.cpp)
 add_executable(${cellbot}_pylon_circle_example src/pylon_circle_example.cpp)
+add_executable(${cellbot}_transform_find src/transform_find.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -150,6 +151,7 @@ set_target_properties(${cellbot}_ur10e_to_home PROPERTIES OUTPUT_NAME ur10e_to_h
 set_target_properties(${cellbot}_ur10e_cartesian_point_move PROPERTIES OUTPUT_NAME ur10e_cartesian_point_move PREFIX "")
 set_target_properties(${cellbot}_find_calib_center PROPERTIES OUTPUT_NAME find_calib_center PREFIX "")
 set_target_properties(${cellbot}_pylon_circle_example PROPERTIES OUTPUT_NAME pylon_circle_example PREFIX "")
+set_target_properties(${cellbot}_transform_find PROPERTIES OUTPUT_NAME transform_find PREFIX "")
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -163,6 +165,7 @@ target_link_libraries(${cellbot}_ur10e_to_home ${catkin_LIBRARIES})
 target_link_libraries(${cellbot}_ur10e_cartesian_point_move ${catkin_LIBRARIES})
 target_link_libraries(${cellbot}_find_calib_center ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 target_link_libraries(${cellbot}_pylon_circle_example ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(${cellbot}_transform_find ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 #############
 ## Install ##
