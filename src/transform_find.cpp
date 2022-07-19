@@ -78,14 +78,14 @@ public:
             board_points_[n].y = (float) (row_n * spacing);
             board_points_[n].z = 0.0;
         } // (int n = 0; n < n_rows*n_cols; ++n)
-        ROS_INFO_STREAM(board_points_);
+        //ROS_INFO_STREAM(board_points_);
 
         // Camera intrinsics (cameraMatrix and distCoeffs)
 
         if (patternfound) {
             cv::Mat mtx = (cv::Mat_<double>(3, 3)
-                    << 2.46181691e+03, 0.00000000e+00, 1.18644066e+03, 0.00000000e+00, 2.46224313e+03, 9.28360871e+02, 0.00000000e+00, 0.00000000e+00, 1.00000000e+00);
-            cv::Mat dist = (cv::Mat_<double>(5, 1) << -0.14608695, 0.30014222, -0.00401834, -0.00076932, -0.754729);
+                    << 2424.687503985171, 0, 1201.538142079326, 0, 2428.130085113846, 955.6942513475894, 0, 0, 1);
+            cv::Mat dist = (cv::Mat_<double>(5, 1) << -0.2460440432365548, 0.7593260195770797, 0.001010992458501329, 0.001776219125150247, -1.2574083896541);
 
             cv::Mat rotation_vector(1, 3, CV_32FC1); // (rvec)
             cv::Mat translation_vector(1, 3, CV_32FC1); // (tvec)
