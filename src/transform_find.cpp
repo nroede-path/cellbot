@@ -84,29 +84,65 @@ public:
 
         if (patternfound) {
             cv::Mat mtx = (cv::Mat_<double>(3, 3)
-                    << 2424.687503985171, 0, 1201.538142079326, 0, 2428.130085113846, 955.6942513475894, 0, 0, 1);
+                    << 2424.687503985171, 0, 1201.538142079326,
+                    0, 2428.130085113846, 955.6942513475894,
+                    0, 0, 1);
             cv::Mat dist = (cv::Mat_<double>(5, 1) << -0.2460440432365548, 0.7593260195770797, 0.001010992458501329, 0.001776219125150247, -1.2574083896541);
 
             cv::Mat rotation_vector(1, 3, CV_32FC1); // (rvec)
             cv::Mat translation_vector(1, 3, CV_32FC1); // (tvec)
 
-            cv::solvePnP(board_points_, centers, mtx, dist, rotation_vector, translation_vector);
-            cv::Mat rotation_matrix(3, 3, CV_32FC1);
-            cv::Rodrigues(rotation_vector, rotation_matrix);
-            cv::Mat camera_to_board = cv::Mat::eye(4, 4, CV_32FC1);
-            cv::Rect rotation_loc = cv::Rect(0, 0, 3, 3);
-            cv::Rect translation_loc = cv::Rect(3, 0, 1, 3);
-            rotation_matrix.copyTo(camera_to_board(rotation_loc));
-            translation_vector.copyTo(camera_to_board(translation_loc));
-            camera_to_board.at<float>(3, 3) = 1;
+            bool tffound = cv::solvePnP(board_points_, centers, mtx, dist, rotation_vector, translation_vector);
 
-            ROS_INFO_STREAM(camera_to_board);
+            if (tffound) {
+                cv::Mat rotation_matrix(3, 3, CV_32FC1);
+                cv::Rodrigues(rotation_vector, rotation_matrix);
+                cv::Mat camera_to_board = cv::Mat::eye(4, 4, CV_32FC1);
+                cv::Rect rotation_loc = cv::Rect(0, 0, 3, 3);
+                cv::Rect translation_loc = cv::Rect(3, 0, 1, 3);
+                rotation_matrix.copyTo(camera_to_board(rotation_loc));
+                translation_vector.copyTo(camera_to_board(translation_loc));
+                camera_to_board.at<float>(3, 3) = 1;
 
-            std::vector<cv::Point3f> camera_points_in_its_frames,
-                    camera_board_points_in_current_camera_frame;
+                ROS_INFO_STREAM(camera_to_board);
 
-            for (int i = 0; i < camera_board_points_in_current_camera_frame.size(); i++) {
-                camera_points_in_its_frames.emplace_back(camera_board_points_in_current_camera_frame[i]);
+                // Project board points into camera frame
+
+//                std::vector<cv::Point3f> camera_points_in_its_frames, camera_board_points_in_current_camera_frame;
+//
+//                camera_board_points_in_current_camera_frame.clear();
+//                camera_board_points_in_current_camera_frame.resize(board_points_.size());
+//                #pragma omp parallel for
+//                for (int i = 0; i < board_points_.size(); i ++ ) {
+//                    cv::Mat original_point_mat(cv::Size(1,4), CV_32FC1);
+//                    cv::Mat transformed_point_mat(cv::Size(1,4), CV_32FC1);
+//                    cv::Point3f point_in_new_frame;
+//
+//                    original_point_mat.at<float>(0,0) = board_points_[i].x;
+//                    original_point_mat.at<float>(1,0) = board_points_[i].y;
+//                    original_point_mat.at<float>(2,0) = board_points_[i].z;
+//                    original_point_mat.at<float>(3,0) = 1;
+//
+//                    cv::gemm(camera_to_board, original_point_mat, 1, cv::Mat(), 0, transformed_point_mat);
+//
+//                    point_in_new_frame.x = transformed_point_mat.at<float>(0,0);
+//                    point_in_new_frame.y = transformed_point_mat.at<float>(1,0);
+//                    point_in_new_frame.z = transformed_point_mat.at<float>(2,0);
+//                    camera_board_points_in_current_camera_frame[i] = point_in_new_frame;
+//                }
+//
+//                for (int i = 0; i < camera_board_points_in_current_camera_frame.size(); i++) {
+//                    camera_points_in_its_frames.emplace_back(camera_board_points_in_current_camera_frame[i]);
+//                }
+
+                std::vector<Point3f> axes = {{0, 0, 0}, {10, 0, 0}, {0, 10, 0}, {0, 0, -10}};
+                std::vector<Point2f> imgpts;
+
+                cv::projectPoints(axes, rotation_vector, translation_vector, mtx, dist, imgpts);
+
+                cv::line(cv_ptr->image, imgpts[0], imgpts[1], Scalar(0, 0, 255), 2, LINE_4);
+                cv::line(cv_ptr->image, imgpts[0], imgpts[2], Scalar(0, 255, 0), 2, LINE_4);
+                cv::line(cv_ptr->image, imgpts[0], imgpts[3], Scalar(255, 0, 0), 2, LINE_4);
             }
         }
 
