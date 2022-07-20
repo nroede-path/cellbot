@@ -135,6 +135,13 @@ public:
 //                    camera_points_in_its_frames.emplace_back(camera_board_points_in_current_camera_frame[i]);
 //                }
 
+                std::vector<Point2f> projcenters;
+                cv::projectPoints(board_points_, rotation_vector, translation_vector, mtx, dist, projcenters);
+
+                for (int j = 0; j < projcenters.size(); j++) {
+                    cv::circle(cv_ptr->image, projcenters[j], 4, Scalar(255, 255, 255));
+                }
+
                 std::vector<Point3f> axes = {{0, 0, 0}, {10, 0, 0}, {0, 10, 0}, {0, 0, -10}};
                 std::vector<Point2f> imgpts;
 
