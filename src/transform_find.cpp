@@ -29,7 +29,7 @@ class ImageConverter
     image_transport::ImageTransport it_;
     image_transport::Subscriber image_sub_;
     image_transport::Publisher image_pub_;
-    ros:: Publisher pubfound;
+    ros::Publisher pubfound;
 
 public:
     ImageConverter()
@@ -175,7 +175,7 @@ public:
 
 int main(int argc, char** argv)
 {
-    ros::init(argc, argv, "image_converter");
+    ros::init(argc, argv, "transform_find");
     ImageConverter ic;
     ros::spin();
     return 0;

@@ -43,6 +43,8 @@
 #include <moveit_msgs/AttachedCollisionObject.h>
 #include <moveit_msgs/CollisionObject.h>
 
+#include <std_msgs/Bool.h>
+
 // #include <sensor_msgs/JointState.h>
 
 #include <moveit_visual_tools/moveit_visual_tools.h>
@@ -54,54 +56,58 @@ int X=1;
 int Y=2;
 int Z=3;
 
-int main(int argc, char** argv)
-{
-    ros::init(argc, argv, "direct_move");
+class robotPlanner {
     ros::NodeHandle node_handle;
-    ros::AsyncSpinner spinner(1);
-    spinner.start();
+    ros::Subscriber subfound;
 
-    // BEGIN_TUTORIAL
-    //
-    // Setup
-    // ^^^^^
-    //
-    // MoveIt operates on sets of joints called "planning groups" and stores them in an object called
-    // the `JointModelGroup`. Throughout MoveIt the terms "planning group" and "joint model group"
-    // are used interchangeably.
-    static const std::string PLANNING_GROUP = "manipulator";
+public:
+    robotPlanner() {
+        subfound = node_handle.subscribe("cam1/board_found", 1, &robotPlanner::boardCb, this);
+    }
 
-    // The :move_group_interface:`MoveGroupInterface` class can be easily
-    // setup using just the name of the planning group you would like to control and plan for.
-    moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
+    void boardCb(const std_msgs::Bool& msg) {
+        // BEGIN_TUTORIAL
+        //
+        // Setup
+        // ^^^^^
+        //
+        // MoveIt operates on sets of joints called "planning groups" and stores them in an object called
+        // the `JointModelGroup`. Throughout MoveIt the terms "planning group" and "joint model group"
+        // are used interchangeably.
+        static const std::string PLANNING_GROUP = "manipulator";
 
-    // We will use the planning_scene_interface:`PlanningSceneInterface`
-    // class to add and remove collision objects in our "virtual world" scene
-    moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
+        // The :move_group_interface:`MoveGroupInterface` class can be easily
+        // setup using just the name of the planning group you would like to control and plan for.
+        moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
 
-    // Raw pointers are frequently used to refer to the planning group for improved performance.
-    const robot_state::JointModelGroup* joint_model_group = move_group.getCurrentState()->getJointModelGroup(PLANNING_GROUP);
+        // We will use the planning_scene_interface:`PlanningSceneInterface`
+        // class to add and remove collision objects in our "virtual world" scene
+        moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
 
-
-    // Getting Basic Information
-    // ^^^^^^^^^^^^^^^^^^^^^^^^^
-    //
-    // We can print the name of the reference frame for this robot.
-    ROS_INFO_NAMED("tutorial", "Planning frame: %s", move_group.getPlanningFrame().c_str());
-
-    // We can also print the name of the end-effector link for this group.
-    ROS_INFO_NAMED("tutorial", "End effector link: %s", move_group.getEndEffectorLink().c_str());
-
-    // We can get a list of all the groups in the robot:
-    ROS_INFO_NAMED("tutorial", "Available Planning Groups:");
-    std::copy(move_group.getJointModelGroupNames().begin(), move_group.getJointModelGroupNames().end(),
-              std::ostream_iterator<std::string>(std::cout, ", "));
+        // Raw pointers are frequently used to refer to the planning group for improved performance.
+        const robot_state::JointModelGroup *joint_model_group = move_group.getCurrentState()->getJointModelGroup(
+                PLANNING_GROUP);
 
 
+        // Getting Basic Information
+        // ^^^^^^^^^^^^^^^^^^^^^^^^^
+        //
+        // We can print the name of the reference frame for this robot.
+        ROS_INFO_NAMED("tutorial", "Planning frame: %s", move_group.getPlanningFrame().c_str());
 
-    // Pre posing the robot in an upright position
-    // ^^^^^^^^^^^^^^^^^^^^^^^^^
-    moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+        // We can also print the name of the end-effector link for this group.
+        ROS_INFO_NAMED("tutorial", "End effector link: %s", move_group.getEndEffectorLink().c_str());
+
+        // We can get a list of all the groups in the robot:
+        ROS_INFO_NAMED("tutorial", "Available Planning Groups:");
+        std::copy(move_group.getJointModelGroupNames().begin(), move_group.getJointModelGroupNames().end(),
+                  std::ostream_iterator<std::string>(std::cout, ", "));
+
+
+
+        // Pre posing the robot in an upright position
+        // ^^^^^^^^^^^^^^^^^^^^^^^^^
+        moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
 //    move_group.setStartState(*move_group.getCurrentState());
 //
@@ -141,9 +147,9 @@ int main(int argc, char** argv)
 //
 //    move_group.move();
 
-    // Establish joint constraints
+        // Establish joint constraints
 
-    moveit_msgs::Constraints joint_constraints;
+        moveit_msgs::Constraints joint_constraints;
 //
 //    // constrains the shoulder lift joint to stay approximately in the upright position
 //    moveit_msgs::JointConstraint shoulder_lift_constraint;
@@ -157,15 +163,15 @@ int main(int argc, char** argv)
 //    joint_constraints.joint_constraints.push_back(shoulder_lift_constraint);
 //
 //
-    // constrains the shoulder pan joint to avoid longer paths
-    moveit_msgs::JointConstraint shoulder_pan_constraint;
-    shoulder_pan_constraint.joint_name="shoulder_pan_joint";
-    shoulder_pan_constraint.position=0;
-    shoulder_pan_constraint.tolerance_below= 3;
-    shoulder_pan_constraint.tolerance_above= 3;
-    shoulder_pan_constraint.weight=1.0;
+        // constrains the shoulder pan joint to avoid longer paths
+        moveit_msgs::JointConstraint shoulder_pan_constraint;
+        shoulder_pan_constraint.joint_name = "shoulder_pan_joint";
+        shoulder_pan_constraint.position = 0;
+        shoulder_pan_constraint.tolerance_below = 3;
+        shoulder_pan_constraint.tolerance_above = 3;
+        shoulder_pan_constraint.weight = 1.0;
 
-    joint_constraints.joint_constraints.push_back(shoulder_pan_constraint);
+        joint_constraints.joint_constraints.push_back(shoulder_pan_constraint);
 //
 //    // constrains the wrist_3_joint joint to avoid longer paths
 //    moveit_msgs::JointConstraint wrist_3_constraint;
@@ -177,24 +183,24 @@ int main(int argc, char** argv)
 //
 //    joint_constraints.joint_constraints.push_back(wrist_3_constraint);
 
-    move_group.setPathConstraints(joint_constraints);
+        move_group.setPathConstraints(joint_constraints);
 
-    // Command series of motion
-    // ^^^^^^^^^^^^^^^^^^^^^^^^^
-    int next;
-    std::cout << "About to start motion, press any button to cont";
-    std::cin >> next;
+        // Command series of motion
+        // ^^^^^^^^^^^^^^^^^^^^^^^^^
+        int next;
+        std::cout << "About to start motion, press any button to cont";
+        std::cin >> next;
 
-    move_group.setStartState(*move_group.getCurrentState());
-    move_group.setPlanningTime(1); //speed up planning from default of 5s to 1s
+        move_group.setStartState(*move_group.getCurrentState());
+        move_group.setPlanningTime(1); //speed up planning from default of 5s to 1s
 
-    // Planning algorithms:
-    // - RRTConnect (fast)
-    // - RRTstar, PRMstar (optimal)
-    // the list of planning algorithm available fmauch_universal_robot/ur10e_moveit_config/config/ompl_planning.yaml
+        // Planning algorithms:
+        // - RRTConnect (fast)
+        // - RRTstar, PRMstar (optimal)
+        // the list of planning algorithm available fmauch_universal_robot/ur10e_moveit_config/config/ompl_planning.yaml
 
-    move_group.setPlannerId("PRMstar");
-    move_group.setNumPlanningAttempts(50);
+        move_group.setPlannerId("PRMstar");
+        move_group.setNumPlanningAttempts(50);
 //
 //
 //    //double y[5]={-0.5,-0.25,0.0,0.25,0.5};
@@ -239,27 +245,43 @@ int main(int argc, char** argv)
 //        }
 //    }
 
-    geometry_msgs::Pose target_pose2;
-    target_pose2.orientation.w = 1.0;
-    target_pose2.position.x = 0.28;
-    target_pose2.position.y = -0.2;
-    target_pose2.position.z = 1.1;
-    move_group.setPoseTarget(target_pose2);
+        geometry_msgs::Pose nextPose;
+        if(msg.data) {
+            nextPose.orientation.w = 1.0;
+            nextPose.position.x = 0.28;
+            nextPose.position.y = -0.2;
+            nextPose.position.z = 1.2;
 
-    // Now, we call the planner to compute the plan and visualize it.
-    // Note that we are just planning, not asking move_group
-    // to actually move the robot.
-    moveit::planning_interface::MoveGroupInterface::Plan my_plan2;
+        }
+        else {
+            nextPose.orientation.w = 1.0;
+            nextPose.position.x = 0.28;
+            nextPose.position.y = -0.2;
+            nextPose.position.z = 0.8;
+        }
 
-    int plan_trial2=0;
-    while (ros::ok() && !move_group.plan(my_plan2) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-    {
-        ros::Duration(0.1).sleep();
-        ROS_INFO("planning trial %i",plan_trial2++);
+        move_group.setPoseTarget(nextPose);
+
+        // Now, we call the planner to compute the plan and visualize it.
+        // Note that we are just planning, not asking move_group
+        // to actually move the robot.
+        moveit::planning_interface::MoveGroupInterface::Plan my_plan2;
+
+        int plan_trial2 = 0;
+        while (ros::ok() && !move_group.plan(my_plan2) == moveit::planning_interface::MoveItErrorCode::SUCCESS) {
+            ros::Duration(0.1).sleep();
+            ROS_INFO("planning trial %i", plan_trial2++);
+        }
+
+        move_group.move();
     }
+};
 
-    move_group.move();
-
-    ros::shutdown();
+int main(int argc, char** argv)
+{
+    ros::init(argc, argv, "direct_move");
+    robotPlanner rp;
+    ros::spin();
+    //ros::shutdown();
     return 0;
 }
