@@ -1,5 +1,5 @@
 // Finds the 4x4 transformation matrix from the camera to the calibration board, then draws axes at the board origin and circles at each center point, and publishes a boolean of whether the board is found or not
-// OD NOT include CALIB_CB_CLUSTERING in the findCirclesGrid, as it significantly decreases consistency
+// DO NOT include CALIB_CB_CLUSTERING in the findCirclesGrid, as it significantly decreases consistency
 
 // Include the ROS library
 #include <ros/ros.h>
