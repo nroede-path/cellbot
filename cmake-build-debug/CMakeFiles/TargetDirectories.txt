@@ -105,6 +105,7 @@
 /home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/CMakeFiles/_find_calib_center.dir
 /home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/CMakeFiles/_pylon_circle_example.dir
 /home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/CMakeFiles/_transform_find.dir
+/home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/CMakeFiles/_ur10e_move_around_board.dir
 /home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/CMakeFiles/test.dir
 /home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/CMakeFiles/edit_cache.dir
 /home/nroede/rosproj/ur_ws/src/cellbot/cmake-build-debug/CMakeFiles/rebuild_cache.dir

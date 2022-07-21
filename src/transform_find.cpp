@@ -1,7 +1,9 @@
-// Finds the 4x4 transformation matrix from the camera to the calibration board
+// Finds the 4x4 transformation matrix from the camera to the calibration board, then draws axes at the board origin and circles at each center point, and publishes a boolean of whether the board is found or not
+// OD NOT include CALIB_CB_CLUSTERING in the findCirclesGrid, as it significantly decreases consistency
 
 // Include the ROS library
 #include <ros/ros.h>
+#include <std_msgs/Bool.h>
 
 // Include opencv2
 #include <opencv2/core.hpp>
@@ -27,6 +29,7 @@ class ImageConverter
     image_transport::ImageTransport it_;
     image_transport::Subscriber image_sub_;
     image_transport::Publisher image_pub_;
+    ros:: Publisher pubfound;
 
 public:
     ImageConverter()
@@ -36,6 +39,8 @@ public:
         image_sub_ = it_.subscribe("/pylon_camera_node/image_raw", 1,
                                    &ImageConverter::imageCb, this);
         image_pub_ = it_.advertise("/image_converter/output_video", 1);
+
+        pubfound = nh_.advertise<std_msgs::Bool>("cam1/board_found", 1000);
 
         cv::namedWindow("Image window", 0);
     }
@@ -58,31 +63,35 @@ public:
             return;
         }
 
-        Size patternsize(6, 15); //number of centers
+        Size patternsize(5, 11); //number of centers
         std::vector<Point2f> centers; //this will be filled by the detected centers (imagePoints)
-        bool patternfound = findCirclesGrid(cv_ptr->image, patternsize, centers, CALIB_CB_ASYMMETRIC_GRID | CALIB_CB_CLUSTERING);
-        drawChessboardCorners(cv_ptr->image, patternsize, Mat(centers), patternfound);
-
-        // Generate calib board center coord vector (objectPoints)
-        std::vector<Point3f> board_points_;
-
-        int n_rows = patternsize.height;
-        int n_cols = patternsize.width;
-        double spacing = 22/sqrt(2); // using diag spacing in mm
-        board_points_.resize(n_cols*n_rows);
-        for (int n = 0; n < board_points_.size(); ++n) {
-            int row_n = n / n_cols;
-            int col_n = n % n_cols;
-
-            board_points_[n].x = (float) ((2 * col_n + row_n % 2) *spacing);
-            board_points_[n].y = (float) (row_n * spacing);
-            board_points_[n].z = 0.0;
-        } // (int n = 0; n < n_rows*n_cols; ++n)
-        //ROS_INFO_STREAM(board_points_);
-
-        // Camera intrinsics (cameraMatrix and distCoeffs)
+        std_msgs::Bool found_status;
+        found_status.data = false;
+        bool patternfound = findCirclesGrid(cv_ptr->image, patternsize, centers, CALIB_CB_ASYMMETRIC_GRID);
 
         if (patternfound) {
+            found_status.data = true;
+            drawChessboardCorners(cv_ptr->image, patternsize, Mat(centers), patternfound);
+
+            // Generate calib board center coord vector (objectPoints)
+            std::vector<Point3f> board_points_;
+
+            int n_rows = patternsize.height;
+            int n_cols = patternsize.width;
+            double spacing = 12/sqrt(2); // using diag spacing in mm
+            board_points_.resize(n_cols*n_rows);
+            for (int n = 0; n < board_points_.size(); ++n) {
+                int row_n = n / n_cols;
+                int col_n = n % n_cols;
+
+                board_points_[n].x = (float) ((2 * col_n + row_n % 2) *spacing);
+                board_points_[n].y = (float) (row_n * spacing);
+                board_points_[n].z = 0.0;
+            } // (int n = 0; n < n_rows*n_cols; ++n)
+            //ROS_INFO_STREAM(board_points_);
+
+            // Camera intrinsics (cameraMatrix and distCoeffs)
+
             cv::Mat mtx = (cv::Mat_<double>(3, 3)
                     << 2424.687503985171, 0, 1201.538142079326,
                     0, 2428.130085113846, 955.6942513475894,
@@ -107,7 +116,6 @@ public:
                 ROS_INFO_STREAM(camera_to_board);
 
                 // Project board points into camera frame
-
 //                std::vector<cv::Point3f> camera_points_in_its_frames, camera_board_points_in_current_camera_frame;
 //
 //                camera_board_points_in_current_camera_frame.clear();
@@ -156,6 +164,9 @@ public:
         // Update GUI Window
         cv::imshow(OPENCV_WINDOW, cv_ptr->image);
         cv::waitKey(2); // Delay between frames
+
+        // Output whether the calibration board was found
+        pubfound.publish(found_status);
 
         // Output modified video stream
         image_pub_.publish(cv_ptr->toImageMsg());
