@@ -279,9 +279,11 @@ public:
 
 int main(int argc, char** argv)
 {
-    ros::init(argc, argv, "direct_move");
+    ros::init(argc, argv, "board_move");
     robotPlanner rp;
-    ros::spin();
+    ros::AsyncSpinner spinner(1);
+    spinner.start();
+    ros::waitForShutdown();
     //ros::shutdown();
     return 0;
 }
