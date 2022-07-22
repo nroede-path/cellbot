@@ -31,8 +31,9 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *********************************************************************/
-
 /* Author: Sachin Chitta, Dave Coleman, Mike Lautman */
+
+// Moves the robot TCP to one of two predefined Cartesian coordinates depending on whether or not the calibration board can be seen (run transform_find concurrently)
 
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
