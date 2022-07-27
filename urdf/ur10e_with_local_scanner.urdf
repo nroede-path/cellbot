@@ -279,7 +279,7 @@
            Use the joint between 'base_link' and 'base_link_inertia' (a dummy
            link/frame) to introduce the necessary rotation over Z (of pi rad).
       -->
-    <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
+    <origin rpy="0 0 3.14159265359" xyz="0 0 1"/>
   </joint>
   <joint name="shoulder_pan_joint" type="revolute">
     <parent link="base_link_inertia"/>
@@ -359,7 +359,7 @@
   <!-- Create a fixed joint with a parameterized name. -->
   <link name="local_scanner">
     <visual>
-      <origin rpy="0 0 3.14159265359" xyz="0 0 0.08"/>
+      <origin rpy="0 0 3.14159265359" xyz="0 0 0.12"/>
       <geometry>
         <sphere radius="0.17"/>
       </geometry>
@@ -368,17 +368,16 @@
       </material>
     </visual>
     <collision>
-      <origin rpy="0 0 3.14159265359" xyz="0 0 0.08"/>
+      <origin rpy="0 0 3.14159265359" xyz="0 0 0.12"/>
       <geometry>
         <sphere radius="0.17"/>
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.0001"/>
-      <origin rpy="0 0 0" xyz="0.0 0.0 0.08"/>
-      <inertia ixx="0.00000144345775595" ixy="0.0" ixz="0.0" iyy="0.00000144345775595" iyz="0.0" izz="0.00000144345775595"/>
+      <mass value="0.8"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.12"/>
+      <inertia ixx="0.01144345775595" ixy="0.0" ixz="0.0" iyy="0.01144345775595" iyz="0.0" izz="0.01144345775595"/>
     </inertial>
-    <self_collide>1</self_collide>
   </link>
   <joint name="local_scanner_joint" type="fixed">
     <!-- The parent link must be read from the robot model it is attached to. -->
@@ -401,4 +400,7 @@
     <child link="base_link"/>
     <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
   </joint>
+  <gazebo reference="local_scanner">
+    <selfCollide>true</selfCollide>
+  </gazebo>
 </robot>
