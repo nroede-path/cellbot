@@ -7,7 +7,7 @@ project(cellbot)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS moveit_ros_planning moveit_ros_planning_interface moveit_visual_tools rviz_visual_tools cv_bridge sensor_msgs roscpp std_msgs image_transport)
+find_package(catkin REQUIRED COMPONENTS moveit_ros_planning moveit_ros_planning_interface moveit_visual_tools rviz_visual_tools cv_bridge sensor_msgs roscpp std_msgs image_transport tf2 tf2_ros)
 find_package(OpenCV 3 REQUIRED)
 
 ## System dependencies are found with CMake's conventions
