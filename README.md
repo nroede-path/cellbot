@@ -41,6 +41,7 @@ Packages needed:
 - Universal_Robots_ROS_Driver
 - fmauch_universal_robot
 - pylon-ros-camera (https://github.com/basler/pylon-ros-camera)
+- gazebo_ros_pkgs (https://classic.gazebosim.org/tutorials?tut=ros_installing&cat=connect_ros)
 
 # Collision Model
 
